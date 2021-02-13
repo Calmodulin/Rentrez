@@ -1,0 +1,55 @@
+---
+title: "Analysis"
+output: html_document
+---
+# BIOL 432 Week 5 Assignment Part 2
+## Project Info
+  + **Date**: Feb 12th, 2021  
+  + **Name**: Yudong Liu
+  + **Github Repository Link**: https://github.com/Calmodulin/Rentrez
+  + **Github user name**: Calmodulin  
+  
+### Load the data that we create in Part 1 into an object called Sequences 3
+```{r}
+Sequences3<-read.csv("Sequences.csv")
+Sequences3
+```
+### Print out each sequence 
+```{r}
+SeqSub<-gsub("","",Sequences3$Sequence) #gsub is used to extract only the nucleotide basepairs from our Sequneces 3 dataframe 
+SeqSub
+```
+### Count the number of basepairs in each sequences 
+```{r}
+library(stringr)#load Stringr library
+A<-str_count(SeqSub,"A")#using str_count function to count the number of "A" in SeqSub data 
+G<-str_count(SeqSub,"G")#using str_count function to count the number of "G" in SeqSub data 
+C<-str_count(SeqSub,"C")#using str_count function to count the number of "C" in SeqSub data 
+T<-str_count(SeqSub,"T")#using str_count function to count the number of "T" in SeqSub data 
+```
+
+### Print out the number of each nucleotide as a table for each of the three sequences
+```{r}
+ncbi_ids <- c("HQ433692.1","HQ433694.1","HQ433691.1")#Supply the same ncbi_id from Part 1 as the column names 
+SeqTable<-matrix(c(A,G,C,T),ncol=3,byrow=TRUE)#Create a table called SeqTable, with the calculated A,G,C,T contents from the previous sectio. Make it with 3 columns as we have 3 sequences.
+colnames(SeqTable)<-c(ncbi_ids)#Supply the column names based on ncbi_ids
+rownames(SeqTable)<-c("A","G","C","T")#Supply the row names as the 4 base pairs (AGCT)
+SeqTable#Print out the table 
+```
+### Include an image of a bacteria from the internet, and a link to the Wikipedia page about Borrelia burgdorferi
+![Bacteria](https://www.illinoisscience.org/wp-content/uploads/2018/06/bacteria_PNG41.png)
+# [Borrelia burgdorferi Wikipedia Page](https://en.wikipedia.org/wiki/Borrelia_burgdorferi)
+
+### Calculate the GC Content
+```{r}
+library(scales) #load the scales library 
+GCCount<-(G+C)/(A+G+C+T) #Calculate the GC content as the sum of GC / sum of AGCT
+GCCountP <-scales::percent(GCCount) #Turn the calculated GC content into a percentage scale 
+```
+### Present the GC Contents that we calculated in a Table called GCTable 
+```{r}
+GCTable<-matrix(c(GCCountP),nrow=3,byrow=FALSE)
+colnames(GCTable)<-c("GC Content")
+rownames(GCTable)<-c(ncbi_ids)
+GCTable
+```
